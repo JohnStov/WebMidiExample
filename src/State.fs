@@ -14,13 +14,10 @@ let init () =
 let update msg model =
   match msg with
   | MIDIConnected access -> 
-      let inputKeys = access.inputs.keys () |> JSI.toSeq
-      let inputs = inputKeys |> Seq.map access.inputs.get
-      let inputNames = inputs |> Seq.map (fun i -> match i.name with
-                                                   | None -> "<>"
-                                                   | Some n -> n) |> String.concat ","
-      Connection access, Cmd.ofMsg (Inputs inputNames)
+      let inputValues = access.inputs.values () |> JSI.toSeq
+      let input = inputValues |> Seq.tryFind (fun i -> i.name.Value = "MPKmini2") 
+      Connection access, Cmd.ofMsg (SelectedInput input)
   | MIDIError _ -> 
       model, Cmd.none
-  | Inputs s -> 
-      InputNames s, Cmd.none
+  | SelectedInput i -> 
+      Input i, Cmd.none

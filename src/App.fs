@@ -19,7 +19,8 @@ let root model dispatch =
     match model with
     | NoConnection _ -> div [] [str "No Connection"]
     | Connection _ -> div [] [str "Connected"]
-    | InputNames s -> div [] [str s]
+    | Input i when i = None -> div [] [str "No Input found"]
+    | Input i -> div [] [str (sprintf "Using input %s" i.Value.name.Value)]
 
 open Elmish.React
 open Elmish.Debug
