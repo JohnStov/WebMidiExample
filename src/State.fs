@@ -8,14 +8,19 @@ open Fable.Import.Browser
 open WebMIDI
 open Types
 
-let init result =
-  {midiAccess = None}, Cmd.ofPromise MIDI.requestAccess [Sysex true] MIDIConnected MIDIError
+let init () =
+  NoConnection, Cmd.ofPromise MIDI.requestAccess [Sysex true] MIDIConnected MIDIError
 
 let update msg model =
   match msg with
   | MIDIConnected access -> 
-      window.alert "connected"
-      { model with midiAccess = Some access}, Cmd.none
-  | MIDIError ex -> 
-      window.alert ex.Message
+      let inputKeys = access.inputs.keys () |> JSI.toSeq
+      let inputs = inputKeys |> Seq.map access.inputs.get
+      let inputNames = inputs |> Seq.map (fun i -> match i.name with
+                                                   | None -> "<>"
+                                                   | Some n -> n) |> String.concat ","
+      Connection access, Cmd.ofMsg (Inputs inputNames)
+  | MIDIError _ -> 
       model, Cmd.none
+  | Inputs s -> 
+      InputNames s, Cmd.none

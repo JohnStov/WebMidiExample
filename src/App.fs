@@ -16,7 +16,10 @@ open Fable.Helpers.React
 open Fable.Helpers.React.Props
 
 let root model dispatch =
-    div [] [str "Hello world"]
+    match model with
+    | NoConnection _ -> div [] [str "No Connection"]
+    | Connection _ -> div [] [str "Connected"]
+    | InputNames s -> div [] [str s]
 
 open Elmish.React
 open Elmish.Debug

@@ -81,3 +81,12 @@ open Fable.PowerPack
 module MIDI =
     let requestAccess (options : MIDIOption list) : JS.Promise<IMIDIAccess> =
         Intern.requestAccess (JsInterop.keyValueList CaseRules.LowerFirst options)
+
+[<RequireQualifiedAccess>]
+module JSI =
+    let toSeq (iterator : JS.IterableIterator<'T>) : 'T seq =
+        Seq.unfold (fun (it : JS.Iterator<'T>) -> 
+            let result = it.next ()
+            match result.value with
+            | None -> None
+            | Some x -> Some(x, it)) (iterator :> JS.Iterator<'T>)
