@@ -1,10 +1,12 @@
 module App.Types
 
-open Global
+open WebMIDI
 
 type Msg =
-  | Something
+  | MIDIConnected of IMIDIAccess
+  | MIDIError of exn
+
 
 type Model = {
-    value: int
-  }
+    midiAccess: IMIDIAccess option
+}
