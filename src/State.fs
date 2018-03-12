@@ -9,14 +9,14 @@ open WebMIDI
 open Types
 
 let init () =
-  NoConnection, Cmd.ofPromise MIDI.requestAccess [Sysex true] MIDIConnected MIDIError
+  NoAccess, Cmd.ofPromise MIDI.requestAccess [Sysex true] MIDIAccess MIDIError
 
 let update msg model =
   match msg with
-  | MIDIConnected access -> 
+  | MIDIAccess access -> 
       let inputValues = access.inputs.values () |> JSI.toSeq
       let input = inputValues |> Seq.tryFind (fun i -> i.name.Value = "MPKmini2") 
-      Connection access, Cmd.ofMsg (SelectedInput input)
+      Access access, Cmd.ofMsg (SelectedInput input)
   | MIDIError _ -> 
       model, Cmd.none
   | SelectedInput i -> 

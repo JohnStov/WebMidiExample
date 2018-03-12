@@ -17,8 +17,8 @@ open Fable.Helpers.React.Props
 
 let root model dispatch =
     match model with
-    | NoConnection _ -> div [] [str "No Connection"]
-    | Connection _ -> div [] [str "Connected"]
+    | NoAccess _ -> div [] [str "No Connection"]
+    | Access _ -> div [] [str "Connected"]
     | Input i when i = None -> div [] [str "No Input found"]
     | Input i -> div [] [str (sprintf "Using input %s" i.Value.name.Value)]
 
