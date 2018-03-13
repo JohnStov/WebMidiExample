@@ -5,10 +5,12 @@ open WebMIDI
 type Msg =
   | MIDIAccess of IMIDIAccess
   | MIDIError of exn
-  | SelectedInput of IMIDIInput option
+  | NoInputMsg
+  | SelectedInput of IMIDIInput
 
 
 type Model = 
   | NoAccess
   | Access of IMIDIAccess
-  | Input of IMIDIInput option
+  | NoInput
+  | Input of IMIDIInput
