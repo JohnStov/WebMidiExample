@@ -7,6 +7,7 @@ type Msg =
   | MIDIError of exn
   | NoInputMsg
   | SelectedInput of IMIDIInput
+  | Start of IMIDIInput
 
 
 type Model = 

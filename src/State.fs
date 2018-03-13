@@ -11,6 +11,9 @@ open Types
 let init () =
   NoAccess, Cmd.ofPromise MIDI.requestAccess [Sysex true] MIDIAccess MIDIError
 
+let handleMessage (msg: IMIDIMessageEvent) : unit =
+    window.alert "MIDI message received"
+
 let update msg model =
     match msg with
     | MIDIAccess access -> 
@@ -23,4 +26,7 @@ let update msg model =
         Access access, (Cmd.ofMsg newMsg)
     | MIDIError _ -> model, Cmd.none
     | NoInputMsg -> NoInput, Cmd.none
-    | SelectedInput i -> Input i, Cmd.none
+    | SelectedInput i -> Input i, Cmd.ofMsg (Start i)
+    | Start i -> 
+        i.onmidimessage <- handleMessage
+        model, Cmd.none
